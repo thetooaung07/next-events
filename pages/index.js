@@ -1,5 +1,6 @@
 import React from "react";
 import { getFeaturedEvents } from "../dummy-data";
+import EventList from "../components/event-list";
 
 function HomePage() {
 
@@ -8,6 +9,8 @@ function HomePage() {
   return (
     <div>
       <h1>The Home Page</h1>
+
+      <EventList items={featureEvents}></EventList>
     </div>
   )
 }
