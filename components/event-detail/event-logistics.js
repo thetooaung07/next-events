@@ -16,6 +16,7 @@ function EventLogistics(props) {
   return (
     <section className={classes.logistics}>
       <div className={classes.image}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`/${image}`} alt={imageAlt} />
       </div>
       <ul className={classes.list}>
