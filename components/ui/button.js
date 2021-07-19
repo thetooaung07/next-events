@@ -1,7 +1,7 @@
 import Link from "next/link";
 import cls from "./button.module.css";
 
-export const Button = (props) => {
+function Button(props) {
   if (props.link) {
     return (
       <Link href={props.link}>
@@ -15,4 +15,6 @@ export const Button = (props) => {
       </button>
     );
   }
-};
+}
+
+export default Button;

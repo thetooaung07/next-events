@@ -1,29 +1,17 @@
-import { useRouter } from "next/router";
-import { getEventById } from "../../dummy-data";
-import EventSummary from "../../components/event-detail/event-summary";
-import EventLogistics from "../../components/event-detail/event-logistics";
+import React from "react";
 import EventContent from "../../components/event-detail/event-content";
-import ErrorAlert from "../../components/ui/error-alert";
-import { Button } from "../../components/ui/button";
+import EventLogistics from "../../components/event-detail/event-logistics";
+import EventSummary from "../../components/event-detail/event-summary";
+import { getEventById, getFeaturedEvents } from "../../helper/api-utils";
 
-function EventDetailPage() {
-  const router = useRouter();
-
-  const eventId = router.query.eventId;
-
-  const event = getEventById(eventId);
+function EventDetailPage(props) {
+  const event = props.selectedEvent;
 
   if (!event) {
     return (
-      <>
-        <ErrorAlert>
-          <p>No Events Found</p>
-        </ErrorAlert>
-
-        <div className="center">
-          <Button link="/events">Show All Events</Button>
-        </div>
-      </>
+      <div className="center">
+        <p>Loading ... </p>
+      </div>
     );
   }
 
@@ -37,10 +25,32 @@ function EventDetailPage() {
         imageAlt={event.title}
       />
       <EventContent>
-        <p>{event.description}</p>{" "}
+        <p>{event.description}</p>
       </EventContent>
     </>
   );
+}
+
+export async function getStaticPaths() {
+  const events = await getFeaturedEvents();
+  const paths = events.map((event) => ({ params: { eventId: event.id } }));
+
+  return {
+    paths: paths,
+    fallback: true,
+  };
+}
+
+export async function getStaticProps(context) {
+  const eventId = context.params.eventId;
+  const event = await getEventById(eventId);
+
+  return {
+    props: {
+      selectedEvent: event,
+    },
+    revalidate: 30,
+  };
 }
 
 export default EventDetailPage;
