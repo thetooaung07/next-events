@@ -2,6 +2,7 @@ import Button from "../ui/button";
 import DateIcon from "../icons/date-icon";
 import AddressIcon from "../icons/address-icon";
 import ArrowRightIcon from "../icons/arrow-right-icon";
+import Image from 'next/image'
 
 import classes from "./event-item.module.css";
 
@@ -20,8 +21,7 @@ export const EventItem = (props) => {
 
   return (
     <li className={classes.item}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={"/" + image} alt={title} />
+      <Image src={"/" + image} alt={title} width={340} height={160}/>
       <div className={classes.content}>
         <div className={classes.summery}>
           <h2>{title}</h2>
