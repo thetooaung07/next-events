@@ -6,10 +6,11 @@ import ResultTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/ui/error-alert";
 import useSWR from "swr";
+import Head from "next/head";
 
 function FilteredEventPage(props) {
   const router = useRouter();
-  const [loadedEvents, setLoadedEvents] = useState(initialState);
+  const [loadedEvents, setLoadedEvents] = useState();
 
   const filterData = router.query.slug;
 
@@ -32,12 +33,33 @@ function FilteredEventPage(props) {
     }
   }, [data]);
 
-  if (!loadedEvents) {
-    return <p className="center">Loading...</p>;
-  }
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name="description" content={`List of Events for Filtered Years.`} />
+    </Head>
+  );
 
+  if (!loadedEvents) {
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">Loading...</p>
+      </>
+    );
+  }
   const numYear = +filterData[0];
   const numMonth = +filterData[1];
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content={`All Events for ${numMonth}/${numYear}.`}
+      />
+    </Head>
+  );
 
   if (
     isNaN(numYear) ||
@@ -45,10 +67,12 @@ function FilteredEventPage(props) {
     numYear > 2030 ||
     numYear < 2021 ||
     numMonth < 1 ||
-    numMonth > 12 || error
+    numMonth > 12 ||
+    error
   ) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid Filter</p>
         </ErrorAlert>
@@ -70,6 +94,7 @@ function FilteredEventPage(props) {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>No Events Found</p>
         </ErrorAlert>
@@ -85,12 +110,12 @@ function FilteredEventPage(props) {
 
   return (
     <>
+      {pageHeadData}
       <ResultTitle date={date}></ResultTitle>
       <EventList items={filteredEvents} />
     </>
   );
 }
-
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
