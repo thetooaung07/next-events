@@ -2,9 +2,10 @@ import Head from "next/head";
 import { getFeaturedEvents } from "../helper/api-utils";
 import EventList from "../components/events/event-list";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function HomePage(props) {
+  const [feedbackItems, setFeedbackItems] = useState([]);
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
 
@@ -30,6 +31,15 @@ function HomePage(props) {
       .then((data) => console.log(data));
   }
 
+  function loadFeedbackHandler() {
+    fetch("/api/feedback")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.feedback);
+        setFeedbackItems(data.feedback);
+      });
+  }
+
   return (
     <div>
       <Head>
@@ -51,6 +61,14 @@ function HomePage(props) {
         </div>
         <button>Send Feedback</button>
       </form>
+
+      <hr />
+      <button onClick={loadFeedbackHandler}>Load Feedback</button>
+      <ul>
+        {feedbackItems.map((item) => (
+          <li key={item.id}>{item.email}</li>
+        ))}
+      </ul>
 
       {/* <EventList items={props.events}></EventList> */}
     </div>

@@ -3,17 +3,15 @@
 import fs from "fs";
 import path from "path";
 
-
-function buildFilePath() {
+function buildFeedbackPath() {
   return path.join(process.cwd(), "data", "feedback.json");
 }
 
 function extractFeedback(filePath) {
   const fileData = fs.readFileSync(filePath);
   const data = JSON.parse(fileData);
-  return data
+  return data;
 }
-
 
 function handler(req, res) {
   if (req.method === "POST") {
@@ -27,20 +25,16 @@ function handler(req, res) {
     };
 
     //store that in the database or in a file
-    const filePath = path.join(process.cwd(), "data", "feedback.json");
-    const fileData = fs.readFileSync(filePath); // fileData in json
-    console.log(typeof fileData);
-    const data = JSON.parse(fileData); //JS objs
+    const filePath = buildFeedbackPath();
+    const data = extractFeedback(filePath);
 
     data.push(newFeedBack);
-    fs.writeFileSync(filePath, JSON.stringify(data)); //convert js Objs to JSON
-    res
-      .status(201)
-      .json({ message: "Successfully stored in File", feedback: newFeedBack });
+    fs.writeFileSync(filePath, JSON.stringify(data));
+    res.status(201).json({ message: "Success!", feedback: newFeedback });
   } else {
-    res.status(200).json({
-      message: `This works!!!`,
-    });
+    const filePath = buildFeedbackPath();
+    const data = extractFeedback(filePath);
+    res.status(200).json({ feedback: data });
   }
 }
 
