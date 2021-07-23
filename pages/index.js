@@ -3,6 +3,7 @@ import { getFeaturedEvents } from "../helper/api-utils";
 import EventList from "../components/events/event-list";
 
 import { useRef, useState } from "react";
+import NewsletterRegistration from "../components/input/newsletter-registration";
 
 function HomePage(props) {
   const [feedbackItems, setFeedbackItems] = useState([]);
@@ -50,27 +51,8 @@ function HomePage(props) {
         />
       </Head>
 
-      <form onSubmit={submitFormHandler}>
-        <div>
-          <label htmlFor="email">Your Email Address</label>
-          <input type="email" id="email" ref={emailInputRef} />
-        </div>
-        <div>
-          <label htmlFor="feedback">Your Feedback</label>
-          <textarea type="text" rows="5" ref={feedbackInputRef}></textarea>
-        </div>
-        <button>Send Feedback</button>
-      </form>
-
-      <hr />
-      <button onClick={loadFeedbackHandler}>Load Feedback</button>
-      <ul>
-        {feedbackItems.map((item) => (
-          <li key={item.id}>{item.email}</li>
-        ))}
-      </ul>
-
-      {/* <EventList items={props.events}></EventList> */}
+      <NewsletterRegistration />
+      <EventList items={props.events}></EventList>
     </div>
   );
 }
