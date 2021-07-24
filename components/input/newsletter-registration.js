@@ -1,49 +1,50 @@
-import { useRef } from "react";
-import classes from "./newsletter-registration.module.css";
+import { useEffect, useState } from 'react';
 
-function NewsletterRegistration() {
-  const emailInputRef = useRef();
+import CommentList from './comment-list';
+import NewComment from './new-comment';
+import classes from './comments.module.css';
 
-  function registrationHandler(event) {
-    event.preventDefault();
+function Comments(props) {
+  const { eventId } = props;
 
-    // fetch user input (state or refs)
-    // optional: validate input
-    // send valid data to API
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState([]);
 
-    const enteredEmail = emailInputRef.current.value;
+  useEffect(() => {
+    if (showComments) {
+      fetch('/api/comments/' + eventId)
+        .then((response) => response.json())
+        .then((data) => {
+          setComments(data.comments);
+        });
+    }
+  }, [showComments]);
 
-    fetch("/api/register", {
-      method: "POST",
-      body: JSON.stringify({ registerEmail: enteredEmail }),
+  function toggleCommentsHandler() {
+    setShowComments((prevStatus) => !prevStatus);
+  }
+
+  function addCommentHandler(commentData) {
+    fetch('/api/comments/' + eventId, {
+      method: 'POST',
+      body: JSON.stringify(commentData),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        emailInputRef.current.value = "";
-      });
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   }
 
   return (
-    <section className={classes.newsletter}>
-      <h2>Sign up to stay updated!</h2>
-      <form onSubmit={registrationHandler}>
-        <div className={classes.control}>
-          <input
-            type="email"
-            id="email"
-            placeholder="Your email"
-            aria-label="Your email"
-            ref={emailInputRef}
-          />
-          <button>Register</button>
-        </div>
-      </form>
+    <section className={classes.comments}>
+      <button onClick={toggleCommentsHandler}>
+        {showComments ? 'Hide' : 'Show'} Comments
+      </button>
+      {showComments && <NewComment onAddComment={addCommentHandler} />}
+      {showComments && <CommentList items={comments} />}
     </section>
   );
 }
 
-export default NewsletterRegistration;
+export default Comments;
