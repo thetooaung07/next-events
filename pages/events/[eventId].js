@@ -4,7 +4,7 @@ import EventContent from "../../components/event-detail/event-content";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventSummary from "../../components/event-detail/event-summary";
 import { getEventById, getFeaturedEvents } from "../../helper/api-utils";
-import  Comment  from "../../components/input/comments";
+import  Comments  from "../../components/input/comments";
 function EventDetailPage(props) {
   const event = props.selectedEvent;
 
@@ -32,7 +32,7 @@ function EventDetailPage(props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
-      <Comment eventId={event.id}></Comment>
+      <Comments eventId={event.id}></Comments>
     </>
   );
 }
