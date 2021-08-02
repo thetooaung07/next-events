@@ -2,7 +2,8 @@ import { MongoClient } from "mongodb";
 
 export async function connectDatabase() {
   const client = await MongoClient.connect(
-    "mongodb+srv://thetooaung:thetooaung@cluster0.uclkr.mongodb.net/events?retryWrites=true&w=majority"
+    "Add your mongo db connection here with cluster, username and password  with db table - events!!!"
+    // "mongodb+srv://<username>:<password>@<cluster>.uclkr.mongodb.net/<db-table>?retryWrites=true&w=majority"
   );
 
   return client;
